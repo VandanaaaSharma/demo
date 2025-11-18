@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <h2>👨‍🏫 Teacher Dashboard</h2>
+
+    <div class="dashboard-card">
+        <h3>Enter Marks</h3>
+
+        <form id="marksForm">
+            <input type="number" id="studentId" placeholder="Student ID" required>
+            <input type="number" id="subjectId" placeholder="Subject ID" required>
+            <input type="number" id="semester" placeholder="Semester" required>
+            <input type="number" id="marks" placeholder="Marks" required>
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+document.getElementById("marksForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+
+    const marks = {
+        student: { id: studentId.value },
+        subject: { id: subjectId.value },
+        semester: semester.value,
+        marks: marks.value
+    };
+
+    const response = await fetch("http://localhost:8080/marks/add", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(marks)
+    });
+
+    if (response.ok) {
+        alert("Marks Added!");
+    } else {
+        alert("Error!");
+    }
+});
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/teacher-login.html";
+}
+</script>
+
+</body>
+</html>
+

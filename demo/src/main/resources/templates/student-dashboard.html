@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <h2>🎓 Student Dashboard</h2>
+
+    <div class="dashboard-card">
+        <h3>Your Marks</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Semester</th>
+                    <th>Marks</th>
+                </tr>
+            </thead>
+            <tbody id="marksTable">
+            </tbody>
+        </table>
+    </div>
+
+    <button onclick="logout()">Logout</button>
+
+</div>
+
+<script>
+const id = localStorage.getItem("studentId");
+
+async function loadMarks() {
+    const response = await fetch(`http://localhost:8080/marks/student/${id}`);
+    const marks = await response.json();
+
+    let html = "";
+    marks.forEach(m => {
+        html += `
+        <tr>
+            <td>${m.subject.subjectName}</td>
+            <td>${m.semester}</td>
+            <td>${m.marks}</td>
+        </tr>`;
+    });
+
+    document.getElementById("marksTable").innerHTML = html;
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/student-login.html";
+}
+
+loadMarks();
+</script>
+
+</body>
+</html>
+
