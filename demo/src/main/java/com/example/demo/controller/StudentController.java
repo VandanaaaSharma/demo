@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Student;
 import com.example.demo.service.StudentService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student getStudent(@PathVariable Long id) {
-        return studentService.getStudentById(id);
+    public Student getStudent(@PathVariable String id) {
+        return studentService.getStudentByStudentId(id);
     }
 }

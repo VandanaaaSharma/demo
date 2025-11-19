@@ -14,26 +14,29 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
+    // Register a student
     public Student register(Student student) {
         return studentRepository.save(student);
     }
 
+    // Login by email and password
     public Student login(String email, String password) {
-        Student student = studentRepository.findByEmail(email);
-        if (student != null && student.getPassword().equals(password)) {
-            return student;
-        }
-        return null;
+        return studentRepository.findByEmail(email)
+                .filter(s -> s.getPassword().equals(password))
+                .orElse(null);
     }
 
-    public Student getStudentById(Long id) {
+    // Get student by primary key
+    public Student getStudentById(String id) {
         return studentRepository.findById(id).orElse(null);
     }
 
+    // Get student by studentId field
     public Student getStudentByStudentId(String studentId) {
-        return studentRepository.findByStudentId(studentId);
+        return studentRepository.findByStudentId(studentId).orElse(null);
     }
 
+    // Get all students
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }

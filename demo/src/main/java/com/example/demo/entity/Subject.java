@@ -1,14 +1,11 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(name = "subjects")
 public class Subject {
 
     @Id
@@ -17,7 +14,18 @@ public class Subject {
 
     private String subjectName;
 
-    private String department;
+    // Default constructor (required by JPA)
+    public Subject() {}
 
-    private int year;
+    // Constructor to easily create subjects
+    public Subject(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getSubjectName() { return subjectName; }
+    public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
 }

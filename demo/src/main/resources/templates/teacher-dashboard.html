@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Teacher Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        input { padding: 8px; margin: 5px; width: 250px; }
+        button { padding: 10px 20px; background: green; color: white; border: none; cursor: pointer; }
+        h3 { color: green; }
+    </style>
+</head>
+<body>
+
+<h1>Teacher Dashboard</h1>
+<h2>Add Marks</h2>
+
+<form method="post" action="/teacher/addMarks">
+    <label>Student ID:</label><br>
+    <input type="number" name="studentId" required><br>
+
+    <label>Subject ID:</label><br>
+    <input type="text" name="subjectId" required><br>
+
+    <label>Subject Name:</label><br>
+    <input type="text" name="subjectName" required><br>
+
+    <label>Semester:</label><br>
+    <input type="number" name="sem" required><br>
+
+    <label>Marks:</label><br>
+    <input type="number" name="marks" required><br><br>
+
+    <button type="submit">Save Marks</button>
+</form>
+
+<h3 th:text="${message}"></h3>
+
+</body>
+</html>
+
