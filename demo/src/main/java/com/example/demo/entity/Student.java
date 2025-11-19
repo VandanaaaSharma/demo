@@ -25,5 +25,7 @@ public class Student {
     private String department;
 
     private int year;
-}
 
+    @Column(unique = true)
+    private String studentCode; // NEW
+}

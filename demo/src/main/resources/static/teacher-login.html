@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login</title>
+
+<style>
+    /* === Page Background === */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #e8f5e9; /* soft light green */
+    }
+
+    /* === Center Container === */
+    .container {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    /* === Card Box === */
+    .card {
+        width: 380px;
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+        border-top: 6px solid #2e7d32; /* dark green top border */
+        border-bottom: 6px solid #2e7d32;
+    }
+
+    .card h2 {
+        text-align: center;
+        color: #2e7d32;
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    /* === Input Fields === */
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #a5d6a7;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus {
+        border-color: #2e7d32;
+        box-shadow: 0 0 6px rgba(46, 125, 50, 0.3);
+    }
+
+    /* === Button === */
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #2e7d32;
+        border: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #1b5e20;
+    }
+
+    /* === Links === */
+    a {
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2>Teacher Login</h2>
+
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <p style="text-align:center; margin-top:15px;">
+            Don’t have an account?
+            <a href="teacher-register.html">Register</a>
+        </p>
+
+        <p style="text-align:center; margin-top:10px;">
+            <a href="role-selection.html">Back</a>
+        </p>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const loginData = {
+        email: email.value,
+        password: password.value
+    };
+
+    const response = await fetch("http://localhost:8080/teacher/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData)
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+        alert("Login Successful!");
+        window.location.href = "teacher-dashboard.html";
+    } else {
+        alert(data.message);
+    }
+});
+</script>
+
+</body>
+</html>

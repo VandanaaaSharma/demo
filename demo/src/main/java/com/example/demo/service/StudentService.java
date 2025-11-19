@@ -14,12 +14,10 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    // Register new student
     public Student register(Student student) {
         return studentRepository.save(student);
     }
 
-    // Login student (email + password)
     public Student login(String email, String password) {
         Student student = studentRepository.findByEmail(email);
         if (student != null && student.getPassword().equals(password)) {
@@ -28,12 +26,14 @@ public class StudentService {
         return null;
     }
 
-    // Get single student
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElse(null);
     }
 
-    // Get all students
+    public Student getStudentByStudentId(String studentId) {
+        return studentRepository.findByStudentId(studentId);
+    }
+
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }

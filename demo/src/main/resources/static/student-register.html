@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+
+    <!-- INTERNAL CSS -->
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f7ec, #ffffff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 30px 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 128, 0, 0.15);
+            border-left: 6px solid #28a745;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #28a745;
+            margin-bottom: 20px;
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 10px;
+            border: 1px solid #c8e6ca;
+            background: #f7fff8;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 6px rgba(40, 167, 69, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #28a745;
+            color: white;
+            font-size: 17px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1e7e34;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2>Student Registration</h2>
+
+        <form id="registerForm">
+
+            <input type="text" id="name" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="department" placeholder="Department (e.g. CSE)" required>
+            <input type="number" id="year" placeholder="Year (1-4)" required>
+            <input type="text" id="studentId" placeholder="Student ID (e.g. S123)" required>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+        <p>
+            Already have an account? 
+            <a href="student-login.html">Login</a>
+        </p>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const student = {
+            studentId: document.getElementById("studentId").value,
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            department: document.getElementById("department").value,
+            year: document.getElementById("year").value
+        };
+
+        const response = await fetch("http://localhost:8080/student/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(student)
+        });
+
+        if (response.ok) {
+            alert("Registration Successful!");
+            window.location.href = "student-login.html";
+        } else {
+            alert("Registration Failed!");
+        }
+    });
+</script>
+
+</body>
+</html>

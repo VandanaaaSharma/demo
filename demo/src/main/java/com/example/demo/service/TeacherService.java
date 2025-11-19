@@ -14,12 +14,10 @@ public class TeacherService {
         this.teacherRepository = teacherRepository;
     }
 
-    // Register new teacher
     public Teacher register(Teacher teacher) {
         return teacherRepository.save(teacher);
     }
 
-    // Login teacher
     public Teacher login(String email, String password) {
         Teacher teacher = teacherRepository.findByEmail(email);
         if (teacher != null && teacher.getPassword().equals(password)) {
@@ -28,7 +26,6 @@ public class TeacherService {
         return null;
     }
 
-    // Get all teachers
     public List<Teacher> getAllTeachers() {
         return teacherRepository.findAll();
     }

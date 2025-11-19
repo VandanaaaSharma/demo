@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Teacher Dashboard — Professional UI</title>
+
+<style>
+  :root{
+    --green: #28a745;
+    --green-dark: #1e7e34;
+    --bg: #eef8ef;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: rgba(40,167,69,0.08);
+    --shadow: 0 8px 24px rgba(16,24,40,0.08);
+    --radius: 12px;
+    --sidebar-w: 220px;
+    --gap: 16px;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  html,body{height:100%; margin:0; background:var(--bg); color:#111827;}
+  .app {
+    display: flex;
+    min-height:100vh;
+    gap:var(--gap);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: linear-gradient(180deg, #fff 0%, #f7fff7 100%);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-radius: 0 16px 16px 0;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .brand {
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .logo {
+    width:44px; height:44px; border-radius:10px;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    display:flex; align-items:center; justify-content:center; color:white; font-weight:700;
+    box-shadow: 0 6px 18px rgba(40,167,69,0.22);
+  }
+  .brand h1{ font-size:16px; margin:0; color:var(--green-dark); }
+
+  .profile-card{
+    background: linear-gradient(180deg,#f9fff9,#ffffff);
+    padding:12px; border-radius:10px; display:flex; gap:10px; align-items:center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  }
+  .profile-avatar{
+    width:46px; height:46px; border-radius:10px; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+  }
+  .profile-info{ font-size:14px; }
+  .profile-info .name{ font-weight:700; color:var(--green-dark); }
+  .profile-info .role{ font-size:12px; color:var(--muted); margin-top:4px; }
+
+  .nav {
+    display:flex; flex-direction:column; gap:8px; margin-top:6px;
+  }
+  .nav a {
+    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px;
+    color:#0f172a; text-decoration:none; font-weight:600;
+  }
+  .nav a .icon{ width:28px; text-align:center; font-size:18px; }
+  .nav a.active, .nav a:hover {
+    background: var(--accent); color:var(--green-dark);
+  }
+
+  .spacer { flex:1; }
+
+  .logout-btn {
+    padding:10px; text-align:center; border-radius:10px; background:#ffecec; color:#b91c1c; font-weight:700; cursor:pointer;
+  }
+
+  /* Main content */
+  .main {
+    flex:1; padding:28px; display:flex; flex-direction:column; gap:18px;
+  }
+
+  .topbar {
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+  }
+  .topbar .title { font-size:20px; font-weight:700; color:var(--green-dark); }
+  .topbar .actions { display:flex; gap:12px; align-items:center; }
+
+  /* Profile mini (top-right) */
+  .mini-profile{
+    display:flex; align-items:center; gap:10px; cursor:pointer; position:relative;
+  }
+  .mini-profile .icon{ font-size:20px; }
+  .mini-profile .mini-name { font-weight:700; color:#0f172a; }
+
+  /* Content card */
+  .card {
+    background:var(--card); padding:22px; border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+
+  /* Two-column layout inside card */
+  .card-grid { display:grid; grid-template-columns: 1fr 420px; gap:18px; align-items:start; }
+  @media (max-width:980px){ .card-grid{ grid-template-columns: 1fr; } .sidebar{ display:none; } }
+
+  /* Form styles */
+  form .row{ display:flex; gap:12px; }
+  label{ font-size:13px; color:var(--muted); display:block; margin-bottom:6px; font-weight:600; }
+  input[type="text"], input[type="number"]{
+    width:100%; padding:12px; border-radius:8px; border:1px solid #e6f0ea; font-size:14px;
+  }
+  .btn {
+    padding:12px 14px; background:var(--green); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;
+  }
+  .btn.secondary { background:#f1f5f0; color:var(--green-dark); border:1px solid #e6f0ea; }
+
+  /* Marks table (for View Marks) */
+  table { width:100%; border-collapse:collapse; margin-top:8px; }
+  th,td { padding:10px; border-bottom:1px solid #f1f6f3; text-align:left; }
+  th { background:var(--green); color:white; font-weight:700; font-size:14px; }
+
+  .muted { color:var(--muted); font-size:13px; }
+  .small { font-size:13px; }
+
+  /* dropdown menu for top profile */
+  .top-menu {
+    position:absolute; right:20px; top:64px; background:white; padding:8px; border-radius:8px; box-shadow:var(--shadow); display:none;
+  }
+  .top-menu a{ display:block; padding:8px 12px; color:#111827; text-decoration:none; border-radius:6px; }
+  .top-menu a:hover{ background:#f3fff3; color:var(--green-dark); }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">CS</div>
+      <h1>College Portal</h1>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-avatar">👩</div>
+      <div class="profile-info">
+        <div class="name" id="sidebarName">Teacher</div>
+        <div class="role">Department</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="#" id="nav-dashboard" class="active" onclick="showView('add')"><span class="icon">➕</span> Add Marks</a>
+      <a href="#" id="nav-view" onclick="showView('view')"><span class="icon">📄</span> View Marks</a>
+      <a href="#" id="nav-edit" onclick="showView('edit')"><span class="icon">✏️</span> Edit Marks</a>
+    </nav>
+
+    <div class="spacer"></div>
+
+    <div class="muted small">Logged in as</div>
+    <div style="font-weight:700; margin-top:6px;" id="sidebarEmail">email@example.com</div>
+
+    <div style="height:12px"></div>
+    <div class="logout-btn" onclick="logout()">Logout</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="title">Teacher Dashboard</div>
+      <div class="actions">
+        <div class="mini-profile" onclick="toggleTopMenu()">
+          <div class="icon">👨‍🏫</div>
+          <div class="mini-name" id="topName">Teacher</div>
+        </div>
+        <div class="top-menu" id="topMenu">
+          <a href="#" onclick="showView('add')">➕ Add Marks</a>
+          <a href="#" onclick="showView('view')">📄 View Marks</a>
+          <a href="#" onclick="showView('edit')">✏️ Edit Marks</a>
+          <a href="#" onclick="logout()">🚪 Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT CARD -->
+    <section class="card">
+      <div class="card-grid">
+
+        <!-- LEFT: MAIN PANEL (switches views) -->
+        <div id="panel">
+          <!-- ADD MARKS view (default) -->
+          <div id="view-add">
+            <h3 style="color:var(--green-dark); margin-top:0;">Add Marks</h3>
+            <p class="muted">Quickly add marks for a student.</p>
+
+            <form id="addForm">
+              <div class="row">
+                <div style="flex:1;">
+                  <label for="studentId">Student ID</label>
+                  <input id="studentId" type="number" required placeholder="e.g. 5">
+                </div>
+                <div style="width:140px;">
+                  <label for="semester">Semester</label>
+                  <input id="semester" type="number" required placeholder="1">
+                </div>
+              </div>
+
+              <label for="subjectId">Subject ID</label>
+              <input id="subjectId" type="number" required placeholder="e.g. 2">
+
+              <label for="marksVal">Marks</label>
+              <input id="marksVal" type="number" required placeholder="e.g. 85">
+
+              <div style="display:flex; gap:12px; margin-top:12px;">
+                <button class="btn" type="submit">Save Marks</button>
+                <button class="btn secondary" type="button" onclick="document.getElementById('addForm').reset()">Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- VIEW MARKS -->
+          <div id="view-view" style="display:none;">
+            <h3 style="color:var(--green-dark); margin-top:0;">View Marks</h3>
+            <p class="muted">Enter Student ID to view marks.</p>
+
+            <div style="display:flex; gap:12px; margin-top:8px;">
+              <input id="viewStudentId" type="number" placeholder="Student ID">
+              <button class="btn" onclick="viewMarks()">View</button>
+            </div>
+
+            <div id="marksTableWrap" style="margin-top:16px;"></div>
+          </div>
+
+          <!-- EDIT MARKS -->
+          <div id="view-edit" style="display:none;">
+            <h3 style="color:var(--green-dark); margin-top:0;">Edit Marks</h3>
+            <p class="muted">Provide Mark ID to load and update.</p>
+
+            <div style="display:flex; gap:12px; margin-top:8px;">
+              <input id="editMarkId" type="number" placeholder="Mark ID">
+              <button class="btn" onclick="loadMarkForEdit()">Load</button>
+            </div>
+
+            <div id="editFormWrap" style="margin-top:12px;"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: INFO / Quick Stats -->
+        <aside style="width:420px;">
+          <div style="padding:14px; border-radius:10px; background:linear-gradient(180deg,#f8fff8,#ffffff); box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+            <h4 style="margin:0;color:var(--green-dark)">Welcome</h4>
+            <p class="muted small" id="welcomeText">—</p>
+
+            <div style="height:12px"></div>
+
+            <div style="display:flex; gap:10px;">
+              <div style="flex:1; padding:12px; background:#fbfffb; border-radius:10px; text-align:center;">
+                <div class="small muted">Students</div>
+                <div style="font-weight:800; font-size:18px;">1,234</div>
+              </div>
+              <div style="flex:1; padding:12px; background:#fbfffb; border-radius:10px; text-align:center;">
+                <div class="small muted">Subjects</div>
+                <div style="font-weight:800; font-size:18px;">24</div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="small muted">Quick Actions</div>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button class="btn" onclick="showView('add')">Add Marks</button>
+              <button class="btn secondary" onclick="showView('view')">View</button>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Initialize teacher info from localStorage
+  const teacherName = localStorage.getItem('teacherName') || localStorage.getItem('teacher') || 'Teacher';
+  const teacherEmail = localStorage.getItem('teacherEmail') || localStorage.getItem('teacherEmailLocal') || 'email@example.com';
+  document.getElementById('sidebarName').innerText = teacherName;
+  document.getElementById('topName').innerText = teacherName;
+  document.getElementById('welcomeText').innerText = 'Welcome back, ' + teacherName + ' — manage marks quickly.';
+  document.getElementById('sidebarEmail').innerText = teacherEmail;
+
+  // View switching
+  function showView(mode){
+    // highlight nav
+    document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+    if(mode==='add'){ document.getElementById('nav-dashboard').classList.add('active'); }
+    if(mode==='view'){ document.getElementById('nav-view').classList.add('active'); }
+    if(mode==='edit'){ document.getElementById('nav-edit').classList.add('active'); }
+
+    document.getElementById('view-add').style.display = (mode==='add') ? 'block' : 'none';
+    document.getElementById('view-view').style.display = (mode==='view') ? 'block' : 'none';
+    document.getElementById('view-edit').style.display = (mode==='edit') ? 'block' : 'none';
+    // hide top menu
+    document.getElementById('topMenu').style.display='none';
+  }
+
+  // Top menu toggle
+  function toggleTopMenu(){
+    const el = document.getElementById('topMenu');
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Add marks
+  document.getElementById('addForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const payload = {
+      student: { id: Number(document.getElementById('studentId').value) },
+      subject: { id: Number(document.getElementById('subjectId').value) },
+      semester: Number(document.getElementById('semester').value),
+      marks: Number(document.getElementById('marksVal').value) || Number(document.getElementById('marksVal')?.value) || Number(document.getElementById('marksVal')?.innerText)
+    };
+
+    try {
+      const res = await fetch('http://localhost:8080/marks/add', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(res.ok){
+        alert('Marks saved successfully');
+        document.getElementById('addForm').reset();
+      } else {
+        const txt = await res.text();
+        alert('Save failed: ' + txt);
+      }
+    } catch(err){
+      console.error(err);
+      alert('Network error: ' + err.message);
+    }
+  });
+
+  // View marks
+  async function viewMarks(){
+    const sid = document.getElementById('viewStudentId').value;
+    if(!sid){ alert('Enter Student ID'); return; }
+    try {
+      const res = await fetch(`http://localhost:8080/marks/student/${sid}`);
+      if(!res.ok){ alert('Failed to fetch marks'); return; }
+      const marks = await res.json();
+      renderMarksTable(marks);
+    } catch(err){
+      alert('Network error');
+    }
+  }
+
+  function renderMarksTable(marks){
+    if(!Array.isArray(marks) || marks.length===0){
+      document.getElementById('marksTableWrap').innerHTML = '<div class="muted">No records found</div>';
+      return;
+    }
+    let html = '<table><thead><tr><th>ID</th><th>Subject</th><th>Semester</th><th>Marks</th><th>Action</th></tr></thead><tbody>';
+    marks.forEach(m=>{
+      const id = m.id || '';
+      const subj = (m.subject && m.subject.subjectName) ? m.subject.subjectName : (m.subject && m.subject.id ? 'Subject '+m.subject.id : '');
+      html += `<tr>
+        <td>${id}</td>
+        <td>${subj}</td>
+        <td>${m.semester || ''}</td>
+        <td>${m.marks || ''}</td>
+        <td><button class="btn secondary" onclick="loadMarkForEdit(${id})">Edit</button></td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('marksTableWrap').innerHTML = html;
+  }
+
+  // Load mark for edit
+  async function loadMarkForEdit(markId){
+    // if called from Edit view button with no args, read input
+    if(!markId){
+      markId = Number(document.getElementById('editMarkId').value);
+      if(!markId){ alert('Provide Mark ID'); return; }
+    }
+
+    try {
+      const res = await fetch(`http://localhost:8080/marks/${markId}`);
+      if(!res.ok){ alert('Mark not found'); return; }
+      const m = await res.json();
+
+      const wrap = document.getElementById('editFormWrap');
+      wrap.innerHTML = `
+        <label>Mark ID</label>
+        <input id="editId" type="number" value="${m.id}" readonly>
+        <label>Student ID</label>
+        <input id="editStudentId" type="number" value="${m.student?.id || ''}">
+        <label>Subject ID</label>
+        <input id="editSubjectId" type="number" value="${m.subject?.id || ''}">
+        <label>Semester</label>
+        <input id="editSemester" type="number" value="${m.semester || ''}">
+        <label>Marks</label>
+        <input id="editMarksVal" type="number" value="${m.marks || ''}">
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <button class="btn" onclick="saveEditedMark()">Save Changes</button>
+          <button class="btn secondary" onclick="document.getElementById('editFormWrap').innerHTML=''">Cancel</button>
+        </div>
+      `;
+      // switch to edit view
+      showView('edit');
+    } catch(err){
+      alert('Error loading mark');
+    }
+  }
+
+  // Save edited mark (PUT)
+  async function saveEditedMark(){
+    const id = Number(document.getElementById('editId').value);
+    const payload = {
+      id: id,
+      student: { id: Number(document.getElementById('editStudentId').value) },
+      subject: { id: Number(document.getElementById('editSubjectId').value) },
+      semester: Number(document.getElementById('editSemester').value),
+      marks: Number(document.getElementById('editMarksVal').value)
+    };
+
+    try {
+      const res = await fetch(`http://localhost:8080/marks/${id}`, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(res.ok){
+        alert('Mark updated');
+        document.getElementById('editFormWrap').innerHTML='';
+      } else {
+        const t = await res.text();
+        alert('Update failed: '+t);
+      }
+    } catch(err){
+      alert('Network error');
+    }
+  }
+
+  // Logout
+  function logout(){
+    localStorage.removeItem('teacherName');
+    localStorage.removeItem('teacherEmail');
+    window.location.href = 'teacher-login.html';
+  }
+
+  // Close top menu when clicking outside
+  window.addEventListener('click', function(e){
+    const menu = document.getElementById('topMenu');
+    if(!e.target.closest('.mini-profile') && !e.target.closest('#topMenu')){
+      menu.style.display='none';
+    }
+  });
+
+  // On load: default view
+  showView('add');
+
+</script>
+</body>
+</html>

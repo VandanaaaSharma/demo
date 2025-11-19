@@ -14,12 +14,29 @@ public class MarksService {
         this.marksRepository = marksRepository;
     }
 
-    // Add marks
     public Marks addMarks(Marks marks) {
         return marksRepository.save(marks);
     }
 
-    // Get marks by student id
+    public Marks updateMarks(Long id, Marks updatedMarks) {
+        return marksRepository.findById(id)
+                .map(m -> {
+                    m.setMarks(updatedMarks.getMarks());
+                    m.setSemester(updatedMarks.getSemester());
+                    m.setStudent(updatedMarks.getStudent());
+                    m.setSubject(updatedMarks.getSubject());
+                    return marksRepository.save(m);
+                }).orElse(null);
+    }
+
+    public boolean deleteMarks(Long id) {
+        if (marksRepository.existsById(id)) {
+            marksRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     public List<Marks> getMarksByStudent(Long studentId) {
         return marksRepository.findAll()
                 .stream()
@@ -27,9 +44,7 @@ public class MarksService {
                 .toList();
     }
 
-    // Get all marks
     public List<Marks> getAllMarks() {
         return marksRepository.findAll();
     }
 }
-
